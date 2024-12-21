@@ -53,8 +53,7 @@ const VideoCarousel = () => {
       }
     }
   }, [startPlay, videoId, isPlaying, loadedData]);
-  const handleLoadedMetaData = (i, e) => setLoadedData((pre) => [...pre, e]);
-
+  
   useEffect(() => {
     let currentProgress = 0;
     let span = videoSpanRef.current;
@@ -122,16 +121,18 @@ const VideoCarousel = () => {
       case "video-reset":
         setVideo((pre) => ({ ...pre, isLastVideo: false, videoId: 0 }));
         break;
-      case "play":
+      case "pause":
         setVideo((pre) => ({ ...pre, isPlaying: !pre.isPlaying }));
         break;
-      case "pause":
+      case "play":
         setVideo((pre) => ({ ...pre, isPlaying: !pre.isPlaying }));
         break;
       default:
         return video;
     }
   };
+  const handleLoadedMetaData = (i, e) => setLoadedData((pre) => [...pre, e]);
+
 
   return (
     <>
@@ -145,10 +146,13 @@ const VideoCarousel = () => {
                   playsInline={true}
                   preload="auto"
                   muted
+                  className={`${list.id === 2 && "translate-x-44"}
+                    pointer.events-none
+                  `}
                   ref={(el) => (videoRef.current[i] = el)}
                   onPlay={() => {
-                    setVideo((prevVideo) => ({
-                      ...prevVideo,
+                    setVideo((pre) => ({
+                      ...pre,
                       isPlaying: true,
                     }));
                   }}
@@ -178,8 +182,8 @@ const VideoCarousel = () => {
           {videoRef.current.map((_, i) => (
             <span
               key={i}
-              ref={(el) => (videoDivRef.current[i] = el)}
               className="mx-2 w-3 h-3 bg-gray-200 rounded-full relative cursor-pointer"
+              ref={(el) => (videoDivRef.current[i] = el)}
             >
               <span
                 className="absolute h-full w-full rounded-full"
